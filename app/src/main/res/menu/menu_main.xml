@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/main_auth"
+        android:icon="@drawable/ic_auth_false"
+        android:title="@string/menu_authorization"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/main_setting"
+        android:title="@string/settings" />
+    <item
+        android:id="@+id/main_donations"
+        android:title="@string/donations"
+        android:visible="false" />
+    <item
+        android:id="@+id/main_whitelist"
+        android:title="@string/main_whitelist" />
+    <item
+        android:id="@+id/main_about"
+        android:title="@string/about" />
+</menu>

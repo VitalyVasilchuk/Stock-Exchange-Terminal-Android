@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="basilisk.stockexchangeterminal">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.QUICKBOOT_POWERON" />
+
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
+
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <receiver
+            android:name=".alarm.DeviceBootReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".alarm.AlarmReceiver" />
+
+        <activity
+            android:name=".activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.DetailActivity"
+            android:label="Detail"
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.ScannerActivity"
+            android:label="@string/title_activity_scanner"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.DonationActivity"
+            android:label="@string/title_activity_donation"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.NewOrderActivity"
+            android:label="@string/title_activity_new_order"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <!--android:screenOrientation="portrait"-->
+        <activity
+            android:name=".activity.PinActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="basilisk.stockexchangeterminal.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.KeyInputActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <service
+            android:name=".job.CheckPriceIntentService"
+            android:exported="false" />
+
+        <receiver
+            android:name=".job.CheckPriceReceiver"
+            android:enabled="true"
+            android:exported="true"/>
+
+        <service
+            android:name=".job.CheckPriceJobService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
+
+
+    </application>
+
+</manifest>

@@ -1,0 +1,24 @@
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- These settings headers are only used on tablets. -->
+
+    <header
+        android:fragment="basilisk.stockexchangeterminal.activity.SettingsActivity$GeneralPreferenceFragment"
+        android:icon="@drawable/ic_pref_list_markets"
+        android:title="@string/header_markets"/>
+        <!--android:summary="определяются предпочтения для работы с основным списком рынков"-->
+
+    <header
+        android:fragment="basilisk.stockexchangeterminal.activity.SettingsActivity$WatcherPreferenceFragment"
+        android:icon="@drawable/ic_pref_watcher"
+        android:title="@string/pref_header_watcher" />
+    <header
+        android:fragment="basilisk.stockexchangeterminal.activity.SettingsActivity$NotificationPreferenceFragment"
+        android:icon="@drawable/ic_pref_notifications"
+        android:title="@string/pref_header_notifications" />
+    <header
+        android:fragment="basilisk.stockexchangeterminal.activity.SettingsActivity$KeysPreferenceFragment"
+        android:icon="@drawable/ic_pref_keys"
+        android:title="@string/header.keys" />
+
+</preference-headers>

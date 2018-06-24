@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+        android:defaultValue="@string/value.not.specified"
+        android:key="public_key"
+        android:selectAllOnFocus="true"
+        android:title="@string/public_key"/>
+    <Preference
+        android:defaultValue="@string/value.not.specified"
+        android:key="private_key"
+        android:selectAllOnFocus="true"
+        android:title="@string/private_key" />
+    <Preference
+        android:defaultValue="@string/value.not.specified"
+        android:key="key_removal"
+        android:selectAllOnFocus="true"
+        android:title="@string/key.removal"
+        android:summary="@string/key.removal.summary"/>
+</PreferenceScreen>

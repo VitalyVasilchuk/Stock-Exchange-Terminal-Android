@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="switch_sort_price"
+        android:title="@string/switch.sort.price" />
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="switch_market_uah"
+        android:title="@string/markets.uah.olnly" />
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="switch_price_usd"
+        android:title="@string/switch.use.rate" />
+    <EditTextPreference
+        android:defaultValue="26.25"
+        android:dependency="switch_price_usd"
+        android:inputType="numberDecimal"
+        android:key="rate_usduah"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/rate.usduah" />
+
+
+</PreferenceScreen>

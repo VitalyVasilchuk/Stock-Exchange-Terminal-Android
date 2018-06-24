@@ -1,0 +1,34 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="switch_watcher"
+        android:summary="@string/switch_watcher_summary"
+        android:title="@string/pref_watcher" />
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:dependency="switch_watcher"
+        android:key="switch_watcher_price"
+        android:summary="@string/switch_watcher_price_summary"
+        android:title="@string/pref_watcher_price" />
+
+<!--
+    <SwitchPreference
+        android:defaultValue="false"
+        android:enabled="true"
+        android:dependency="switch_watcher"
+        android:key="switch_watcher_order"
+        android:summary="@string/switch_watcher_order_summary"
+        android:title="@string/pref_watcher_order" />
+-->
+
+    <ListPreference
+        android:defaultValue="15"
+        android:dependency="switch_watcher"
+        android:entries="@array/watcher_frequency"
+        android:entryValues="@array/watcher_frequency_values"
+        android:key="watcher_frequency"
+        android:title="@string/pref_watcher_launch_frequency" />
+
+</PreferenceScreen>
