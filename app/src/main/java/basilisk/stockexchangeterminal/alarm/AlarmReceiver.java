@@ -269,6 +269,8 @@ public class AlarmReceiver extends BroadcastReceiver {
     }
 
     private void showSampleNotification(Context context, String message) {
+        if (!BuildConfig.DEBUG) return;
+
         Intent resultIntent = new Intent(context, MainActivity.class);
         resultIntent.setAction(currencyPair);
 
