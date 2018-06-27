@@ -158,8 +158,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                         Ticker ticker = gson.fromJson(o.toString(), new TypeToken<Ticker>() {}.getType());
                         priceBid = ticker.getBuy();
                         priceAsk = ticker.getSell();
-                        if (priceBid.length() >= 10) text_bid.setText(priceBid.substring(0, 10));
-                        if (priceAsk.length() >= 10) text_ask.setText(priceAsk.substring(0, 10));
+                        text_bid.setText((priceBid + "0000000000").substring(0, 10));
+                        text_ask.setText((priceAsk + "0000000000").substring(0, 10));
                         String sBalance = text_balance_trade.getText().toString();
                         if (sBalance.length() > 0) {
                             float f = Float.parseFloat(priceBid) * Float.parseFloat(sBalance);
