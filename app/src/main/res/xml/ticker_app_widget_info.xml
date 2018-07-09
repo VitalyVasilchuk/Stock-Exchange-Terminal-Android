@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--android:resizeMode="horizontal|vertical"-->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:configure="basilisk.stockexchangeterminal.widget.TickerAppWidgetConfigureActivity"
+    android:initialKeyguardLayout="@layout/ticker_app_widget"
+    android:initialLayout="@layout/ticker_app_widget"
+    android:minHeight="40dp"
+    android:minResizeWidth="40dp"
+    android:minWidth="110dp"
+    android:previewImage="@drawable/ticker_appwidget_preview"
+    android:updatePeriodMillis="0"
+    android:widgetCategory="home_screen|keyguard" />

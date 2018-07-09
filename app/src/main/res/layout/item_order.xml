@@ -4,12 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:baselineAligned="false"
-    android:orientation="horizontal"
-    android:paddingBottom="1dp"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp"
-    android:paddingTop="1dp">
+    android:padding="8dp"
+    android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="0dp"

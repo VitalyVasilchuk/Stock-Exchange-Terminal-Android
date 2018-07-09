@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingBottom="1dp"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp"
-    android:paddingTop="1dp">
+    android:padding="8dp">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -18,10 +16,9 @@
             android:id="@+id/type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center_vertical|center_horizontal"
-            android:textAlignment="center"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:text="sell" />
     </LinearLayout>
 
     <LinearLayout
@@ -34,29 +31,29 @@
             android:id="@+id/date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textAlignment="center"
+            android:gravity="center"
             android:textColor="@color/secondary_text"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            tools:text="9 июля 2018 г. 20:32:22" />
 
         <TextView
             android:id="@+id/member"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textAlignment="center"
+            android:gravity="center"
             android:textColor="@color/secondary_text"
             android:textSize="12sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="Basilisk" />
 
         <TextView
             android:id="@+id/ID"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textAlignment="center"
+            android:gravity="center"
             android:textColor="@color/secondary_text"
-            android:textSize="10sp" />
+            android:textSize="10sp"
+            tools:text="1234567" />
 
     </LinearLayout>
 
@@ -70,26 +67,26 @@
             android:id="@+id/price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textAlignment="textEnd"
-            android:textSize="18sp" />
+            android:gravity="center_vertical|end"
+            android:textSize="18sp"
+            tools:text="0.0123456789" />
 
         <TextView
             android:id="@+id/volume"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textAlignment="textEnd"
+            android:gravity="center_vertical|end"
             android:textSize="14sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="12345.0123456789" />
 
         <TextView
             android:id="@+id/amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textAlignment="textEnd"
-            android:textSize="14sp" />
+            android:gravity="center_vertical|end"
+            android:textSize="14sp"
+            tools:text="123.0123456789" />
 
     </LinearLayout>
 

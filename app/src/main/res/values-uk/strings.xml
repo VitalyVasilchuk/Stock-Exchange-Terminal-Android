@@ -117,4 +117,6 @@
         <item>кожні 20 хвилин</item>
         <item>кожні 30 хвилин</item>
     </string-array>
+    <string name="apply_widget">застосувати</string>
+    <string name="market_select_required">виберіть потрібний ринок</string>
 </resources>

@@ -117,4 +117,6 @@
         <item>every 20 minutes</item>
         <item>every 30 minutes</item>
     </string-array>
+    <string name="apply_widget">apply</string>
+    <string name="market_select_required">select the required market</string>
 </resources>

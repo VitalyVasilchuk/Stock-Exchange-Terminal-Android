@@ -146,6 +146,14 @@ public class Ticker {
         this.updated = updated;
     }
 
+    public String getFormattedBuy() {
+        return String.format("%.5f", Float.parseFloat(buy)).replace(",", ".");
+    }
+
+    public String getFormattedSell() {
+        return String.format("%.5f", Float.parseFloat(sell)).replace(",", ".");
+    }
+
     @Override
     public String toString() {
         return "Ticker{" +
