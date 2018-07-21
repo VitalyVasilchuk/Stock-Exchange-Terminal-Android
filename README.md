@@ -37,4 +37,7 @@
 <li>MPAndroidChart – формирование различных видов графического представления данных (диаграммы).
 </ul>
 
-<a href='https://play.google.com/store/apps/details?id=basilisk.stockexchangeterminal&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1' target='_blank'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_gb/badges/images/generic/en_badge_web_generic.png'/></a>
+<a href="https://play.google.com/store/apps/details?id=https://play.google.com/store/apps/details?id=basilisk.stockexchangeterminal">
+  <img alt="Get it on Google Play"
+       src="https://developer.android.com/images/brand/en_generic_rgb_wo_60.png" />
+</a>
