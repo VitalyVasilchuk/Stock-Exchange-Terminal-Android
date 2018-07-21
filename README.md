@@ -1,5 +1,4 @@
 <h1>Биржевой терминал</h1>
-<a href="https://play.google.com/store/apps/details?id=basilisk.stockexchangeterminal" target="_blank">скачать из Google Play</a>
 
 <h2>Назначение приложения</h2>
 <p>Предоставление доступа к публичным данным торгов, проходящих на украинской бирже криптовалют "BTC TRADE UA": текущие тикеры рынков, график цен за последние сутки, предложения покупки и продажи, совершенные сделки. В случае указания публичного и приватного ключей в настройках, предоставление доступа к приватным операциям аккаунта пользователя на бирже: получение баланса по счетам, просмотр, создание и удаление ордеров, история сделок.
@@ -37,3 +36,5 @@
 <li>ZXing – реализация чтения QR/Bar кодов c помощью встроенной в устройство камеры.
 <li>MPAndroidChart – формирование различных видов графического представления данных (диаграммы).
 </ul>
+
+<a href='https://play.google.com/store/apps/details?id=basilisk.stockexchangeterminal&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1' target='_blank'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_gb/badges/images/generic/en_badge_web_generic.png'/></a>
