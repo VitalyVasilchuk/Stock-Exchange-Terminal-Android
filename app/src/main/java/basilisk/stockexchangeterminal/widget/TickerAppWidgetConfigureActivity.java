@@ -16,17 +16,32 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.internal.LinkedTreeMap;
+import com.google.gson.reflect.TypeToken;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import basilisk.stockexchangeterminal.BuildConfig;
 import basilisk.stockexchangeterminal.R;
 import basilisk.stockexchangeterminal.activity.MainActivity;
+import basilisk.stockexchangeterminal.api.HttpServerApi;
+import basilisk.stockexchangeterminal.entity.Ticker;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * The configuration screen for the {@link TickerAppWidget TickerAppWidget} AppWidget.
@@ -35,6 +50,8 @@ public class TickerAppWidgetConfigureActivity extends AppCompatActivity {
 
     private static final String PREFS_NAME = "TickerAppWidget";
     private static final String PREF_PREFIX_KEY = "appwidget_";
+    private static final String TAG = "TickerAppWidget";
+
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     Spinner mAppWidgetSpinner;
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -118,16 +135,57 @@ public class TickerAppWidgetConfigureActivity extends AppCompatActivity {
         }
 
         // подготовка списка вылют
-        Spinner spinner = (Spinner) findViewById(R.id.spinner_currency);
+        final Spinner spinner = (Spinner) findViewById(R.id.spinner_currency);
         final List<String> currencyList = new ArrayList<>(Arrays.asList(MainActivity.CURRENCY_SYMB));
-        ArrayAdapter<String> adp = new ArrayAdapter<String> (this,android.R.layout.simple_spinner_dropdown_item, currencyList);
+        final ArrayList tickerList = new ArrayList();
+
+        final ArrayAdapter<String> adp = new ArrayAdapter<String> (this,android.R.layout.simple_spinner_dropdown_item, tickerList);
         spinner.setAdapter(adp);
 
-        String compareValue = loadTitlePref(TickerAppWidgetConfigureActivity.this, mAppWidgetId);
-        if (compareValue != null) {
-            int spinnerPosition = adp.getPosition(compareValue);
-            spinner.setSelection(spinnerPosition);
-        }
+        Call<Map<String, Object>> call = HttpServerApi.Factory.tickerList();
+        call.enqueue(new Callback<Map<String, Object>>() {
+            @Override
+            public void onResponse(Call<Map<String, Object>> call, Response<Map<String, Object>> response) {
+                if (response.isSuccessful()) {
+                    Map<String, Object> list = response.body();
+                    tickerList.clear();
+                    for (Map.Entry<String, Object> entry : list.entrySet()) {
+                        if (!entry.getKey().equals("status")) {
+                            LinkedTreeMap o = (LinkedTreeMap) entry.getValue();
+                            if (o != null) {
+                                Gson gson = new GsonBuilder().create();
+                                Ticker ticker = gson.fromJson(o.toString(), new TypeToken<Ticker>() {
+                                }.getType());
+                                tickerList.add(ticker.getCurrencyTrade() + "/" + ticker.getCurrencyBase());
+                            }
+                        }
+                    }
+
+                    // сортировка списка рынков
+                    Collections.sort(tickerList, new Comparator<String>() {
+                        @Override
+                        public int compare(String v1, String v2) {
+                            return v1.compareTo(v2); // ascending
+                        }
+                    });
+
+                    adp.notifyDataSetChanged();
+                    String compareValue = loadTitlePref(TickerAppWidgetConfigureActivity.this, mAppWidgetId);
+                    if (compareValue != null) {
+                        int spinnerPosition = adp.getPosition(compareValue);
+                        spinner.setSelection(spinnerPosition);
+                    }                }
+                else {
+                    if (BuildConfig.DEBUG) Log.d(TAG, "loadTickerList.onResponse(): " + response.code() + " " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Map<String, Object>> call, Throwable t) {
+                if (BuildConfig.DEBUG) Log.d(TAG, "loadTickerList.onFailure(): " + t.getMessage());
+            }
+        });
+
     }
 }
 

@@ -1,4 +1,4 @@
-package basilisk.stockexchangeterminal.httpserverapi;
+package basilisk.stockexchangeterminal.api;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

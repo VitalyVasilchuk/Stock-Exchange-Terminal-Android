@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.google.gson.Gson;
@@ -22,10 +23,12 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import basilisk.stockexchangeterminal.BuildConfig;
 import basilisk.stockexchangeterminal.R;
+import basilisk.stockexchangeterminal.Utils;
 import basilisk.stockexchangeterminal.activity.MainActivity;
-import basilisk.stockexchangeterminal.entity.ticker.Ticker;
-import basilisk.stockexchangeterminal.httpserverapi.HttpServerApi;
+import basilisk.stockexchangeterminal.entity.Ticker;
+import basilisk.stockexchangeterminal.api.HttpServerApi;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,52 +45,62 @@ public class TickerAppWidget extends AppWidgetProvider {
 
     private static ArrayList tickerList = new ArrayList();
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
+    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
+        String market = TickerAppWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
+        String[] itemMarket = market.split("/");
 
-        String textCurrency = TickerAppWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
-        // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.ticker_app_widget);
+        if (itemMarket.length == 2) {
+            // Construct the RemoteViews object
+            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.ticker_app_widget);
 
-        // определение иконки для виджета, получение данных о цене
-        int iSymbol = Arrays.asList(MainActivity.CURRENCY_SYMB).indexOf(textCurrency.toLowerCase());
-        int icon = R.drawable.unknown;
-        String title = textCurrency;
-        if (iSymbol >= 0) {
-            icon = MainActivity.CURRENCY_ICON[iSymbol];
-            title = MainActivity.CURRENCY_NAME[iSymbol];
-        }
-
-        views.setImageViewResource(R.id.image_icon, icon);
-        views.setTextViewText(R.id.text_title, title);
-        views.setTextViewText(R.id.text_date_time, (String) DateFormat.format("dd.MM.yyyy HH:mm", System.currentTimeMillis()));
-
-        for (int i = 0; i < tickerList.size(); i++) {
-            Ticker ticker = (Ticker) tickerList.get(i);
-            Log.d(TAG, ticker.getCurrency_trade() + " ? " + textCurrency);
-            if (ticker.getCurrency_trade().equalsIgnoreCase(textCurrency)) {
-                views.setTextViewText(R.id.text_bid, ticker.getFormattedBuy());
-                views.setTextViewText(R.id.text_ask, ticker.getFormattedSell());
-                break;
+            // определение иконки для виджета, получение данных о цене
+            int iSymbol = Arrays.asList(MainActivity.CURRENCY_SYMB).indexOf(itemMarket[0].toLowerCase());
+            int icon = R.drawable.unknown;
+            String title = market;
+            if (iSymbol >= 0) {
+                icon = MainActivity.CURRENCY_ICON[iSymbol];
+                title = MainActivity.CURRENCY_NAME[iSymbol];
             }
+
+            views.setImageViewResource(R.id.image_icon, icon);
+            views.setTextViewText(R.id.text_title, title);
+            views.setTextViewText(R.id.text_date_time, (String) DateFormat.format("dd.MM.yyyy HH:mm", System.currentTimeMillis()));
+            views.setViewVisibility(R.id.image_update, View.VISIBLE);
+            views.setViewVisibility(R.id.progress_bar, View.INVISIBLE);
+
+            for (int i = 0; i < tickerList.size(); i++) {
+                Ticker ticker = (Ticker) tickerList.get(i);
+                if (ticker.getCurrencyTrade().equalsIgnoreCase(itemMarket[0]) &&
+                        ticker.getCurrencyBase().equalsIgnoreCase(itemMarket[1])) {
+                    views.setTextViewText(R.id.text_bid, Utils.getFormattedValue(ticker.getBuy()));
+                    views.setTextViewText(R.id.text_ask, Utils.getFormattedValue(ticker.getSell()));
+                    break;
+                }
+            }
+
+            // launch configuration activity on icon click
+            Intent intentConfig = new Intent(context, TickerAppWidgetConfigureActivity.class);
+            intentConfig.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            PendingIntent pendingIntentConfig = PendingIntent.getActivity(context, appWidgetId, intentConfig, 0);
+            views.setOnClickPendingIntent(R.id.image_icon, pendingIntentConfig);
+
+            // активити и ее параметры
+            Intent intentMain = new Intent(context, MainActivity.class);
+            PendingIntent pendingIntentMain = PendingIntent.getActivity(context, appWidgetId,
+                    intentMain, PendingIntent.FLAG_UPDATE_CURRENT);
+            views.setOnClickPendingIntent(R.id.text_bid, pendingIntentMain);
+            views.setOnClickPendingIntent(R.id.text_ask, pendingIntentMain);
+
+            // update on image click
+            Intent clickIntent = new Intent(context, TickerAppWidget.class);
+            clickIntent.setAction(UPDATE_ALL_WIDGETS);
+            clickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            PendingIntent pendingClickIntent = PendingIntent.getBroadcast(context, appWidgetId, clickIntent, 0);
+            views.setOnClickPendingIntent(R.id.image_update, pendingClickIntent);
+
+            // Instruct the widget manager to update the widget
+            appWidgetManager.updateAppWidget(appWidgetId, views);
         }
-
-        // launch configuration activity on icon click
-        Intent intent = new Intent(context, TickerAppWidgetConfigureActivity.class);
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, appWidgetId, intent, 0);
-        views.setOnClickPendingIntent(R.id.image_icon, pendingIntent);
-
-        // update on image click
-        Intent clickIntent = new Intent(context, TickerAppWidget.class);
-        clickIntent.setAction(UPDATE_ONE_WIDGET);
-        clickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        clickIntent.putExtra("EXTRA_CURRENCY", textCurrency);
-        PendingIntent pendingClickIntent = PendingIntent.getBroadcast(context, appWidgetId, clickIntent, 0);
-        views.setOnClickPendingIntent(R.id.image_update, pendingClickIntent);
-
-        // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
     @Override
@@ -109,7 +122,6 @@ public class TickerAppWidget extends AppWidgetProvider {
     @Override
     public void onEnabled(Context context) {
         // Enter relevant functionality for when the first widget is created
-        Log.d(TAG, "onEnabled()");
         super.onEnabled(context);
 
         Intent intent = new Intent(context, TickerAppWidget.class);
@@ -117,13 +129,14 @@ public class TickerAppWidget extends AppWidgetProvider {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC, System.currentTimeMillis(), TimeUnit.MINUTES.toMillis(5), pendingIntent);
+        if (alarmManager != null) {
+            alarmManager.setRepeating(AlarmManager.RTC, System.currentTimeMillis(), TimeUnit.MINUTES.toMillis(5), pendingIntent);
+        }
     }
 
     @Override
     public void onDisabled(Context context) {
         // Enter relevant functionality for when the last widget is disabled
-        Log.d(TAG, "onDisabled()");
         super.onDisabled(context);
 
         Intent intent = new Intent(context, TickerAppWidget.class);
@@ -131,25 +144,33 @@ public class TickerAppWidget extends AppWidgetProvider {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(pendingIntent);
+        if (alarmManager != null) {
+            alarmManager.cancel(pendingIntent);
+        }
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, "onReceive().action = " + intent.getAction());
         super.onReceive(context, intent);
 
         if (intent.getAction().equalsIgnoreCase(UPDATE_ALL_WIDGETS)) {
-            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+            Bundle extras = intent.getExtras();
+            final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+
+            int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+            if (extras != null) {
+                appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+                // подмена иконки обновления индикатором загрузки
+                RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.ticker_app_widget);
+                views.setViewVisibility(R.id.image_update, View.INVISIBLE);
+                views.setViewVisibility(R.id.progress_bar, View.VISIBLE);
+                appWidgetManager.updateAppWidget(appWidgetId, views);
+            }
+
             ComponentName thisAppWidget = new ComponentName(context.getPackageName(), getClass().getName());
             int appWidgetIds[] = appWidgetManager.getAppWidgetIds(thisAppWidget);
 
-            loadTickerList(context, appWidgetManager, appWidgetIds);
-/*
-            for (int appWidgetID : appWidgetIds) {
-                updateAppWidget(context, appWidgetManager, appWidgetID);
-            }
-*/
+            loadTickerList(context, appWidgetManager, appWidgetIds, appWidgetId);
         }
 
         if (intent.getAction().equalsIgnoreCase(UPDATE_ONE_WIDGET)) {
@@ -162,7 +183,8 @@ public class TickerAppWidget extends AppWidgetProvider {
         }
     }
 
-    private void loadTickerList(final Context context, final AppWidgetManager appWidgetManager, final int[] appWidgetIds) {
+    private void loadTickerList(final Context context, final AppWidgetManager appWidgetManager,
+                                final int[] appWidgetIds, final int appWidgetId) {
         Call<Map<String, Object>> call = HttpServerApi.Factory.tickerList();
         call.enqueue(new Callback<Map<String, Object>>() {
             @Override
@@ -185,15 +207,22 @@ public class TickerAppWidget extends AppWidgetProvider {
                     for (int appWidgetID : appWidgetIds) {
                         updateAppWidget(context, appWidgetManager, appWidgetID);
                     }
-                }
-                else {
-                    Log.d(TAG, "loadTickerList.onResponse(): " + response.code() + " " + response.message());
+                } else {
+                    if (BuildConfig.DEBUG) Log.d(TAG, "loadTickerList.onResponse(): " + response.code() + " " + response.message());
+                    Intent intent = new Intent(context, TickerAppWidget.class);
+                    intent.setAction(UPDATE_ONE_WIDGET);
+                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+                    context.sendBroadcast(intent);
                 }
             }
 
             @Override
             public void onFailure(Call<Map<String, Object>> call, Throwable t) {
-                Log.d(TAG, "loadTickerList.onFailure(): " + t.getMessage());
+                if (BuildConfig.DEBUG) Log.d(TAG, "loadTickerList.onFailure(): " + t.getMessage());
+                Intent intent = new Intent(context, TickerAppWidget.class);
+                intent.setAction(UPDATE_ONE_WIDGET);
+                intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+                context.sendBroadcast(intent);
             }
         });
     }

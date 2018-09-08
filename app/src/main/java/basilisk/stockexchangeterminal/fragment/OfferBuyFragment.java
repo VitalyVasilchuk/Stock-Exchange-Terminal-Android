@@ -21,9 +21,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import basilisk.stockexchangeterminal.R;
+import basilisk.stockexchangeterminal.Utils;
 import basilisk.stockexchangeterminal.activity.NewOrderActivity;
-import basilisk.stockexchangeterminal.entity.offerbuy.OfferBuy;
-import basilisk.stockexchangeterminal.httpserverapi.HttpServerApi;
+import basilisk.stockexchangeterminal.entity.OfferBuy;
+import basilisk.stockexchangeterminal.api.HttpServerApi;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -80,12 +81,14 @@ public class OfferBuyFragment extends Fragment implements AdapterView.OnItemLong
                 if (activity != null && isAdded()) {
                     swipeRefreshLayout.setRefreshing(false);
                     if (response.isSuccessful()) {
-                        OfferBuy ob = response.body();
-                        List obList = ob.getList();
-                        if (obList.size() > 0) {
-                            dataList.clear();
-                            dataList.addAll(obList);
-                            prepareList();
+                        OfferBuy offerBuy = response.body();
+                        if (offerBuy != null && offerBuy.getList() != null) {
+                            List obList = offerBuy.getList();
+                            if (obList.size() > 0) {
+                                dataList.clear();
+                                dataList.addAll(obList);
+                                prepareList();
+                            }
                         }
                     } else {
                         Toast.makeText(context, getString(R.string.server_request_error) +
@@ -113,9 +116,9 @@ public class OfferBuyFragment extends Fragment implements AdapterView.OnItemLong
         for (int i = 0; i < dataList.size(); i++) {
             OfferBuy.Offer bo = (OfferBuy.Offer) dataList.get(i);
             hashMap = new HashMap<>();
-            hashMap.put("price", bo.getPrice());
-            hashMap.put("volume", bo.getCurrency_trade());
-            hashMap.put("amount", bo.getCurrency_base());
+            hashMap.put("price", Utils.getFormattedValue(bo.getPrice()));
+            hashMap.put("volume", Utils.getFormattedValue(bo.getCurrency_trade()));
+            hashMap.put("amount", Utils.getFormattedValue(bo.getCurrency_base()));
             arrayList.add(hashMap);
         }
 

@@ -48,8 +48,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import basilisk.stockexchangeterminal.R;
-import basilisk.stockexchangeterminal.entity.candlestick.CandleStick;
-import basilisk.stockexchangeterminal.httpserverapi.HttpServerApi;
+import basilisk.stockexchangeterminal.entity.CandleStick;
+import basilisk.stockexchangeterminal.api.HttpServerApi;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

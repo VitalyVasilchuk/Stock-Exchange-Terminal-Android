@@ -33,8 +33,9 @@ import java.util.HashMap;
 
 import basilisk.stockexchangeterminal.R;
 import basilisk.stockexchangeterminal.SingletonSession;
-import basilisk.stockexchangeterminal.entity.deal.Deal;
-import basilisk.stockexchangeterminal.httpserverapi.HttpServerApi;
+import basilisk.stockexchangeterminal.Utils;
+import basilisk.stockexchangeterminal.entity.Deal;
+import basilisk.stockexchangeterminal.api.HttpServerApi;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -165,9 +166,9 @@ public class DealOwnerFragment extends Fragment implements SwipeRefreshLayout.On
             hashMap.put("date", d.getPub_date());
             hashMap.put("type", d.getType());
             hashMap.put("member", d.getUser());
-            hashMap.put("price", d.getPrice());
-            hashMap.put("volume", d.getAmnt_trade());
-            hashMap.put("amount", d.getAmnt_base());
+            hashMap.put("price", Utils.getFormattedValue(d.getPrice()));
+            hashMap.put("volume", Utils.getFormattedValue(d.getAmnt_trade()));
+            hashMap.put("amount", Utils.getFormattedValue(d.getAmnt_base()));
             arrayList.add(hashMap);
         }
 

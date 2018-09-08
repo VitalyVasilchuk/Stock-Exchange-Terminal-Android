@@ -1,4 +1,4 @@
-package basilisk.stockexchangeterminal.entity.price;
+package basilisk.stockexchangeterminal.entity;
 
 import java.io.Serializable;
 import java.util.List;

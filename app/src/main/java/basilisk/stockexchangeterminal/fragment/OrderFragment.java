@@ -37,8 +37,9 @@ import java.util.Map;
 
 import basilisk.stockexchangeterminal.R;
 import basilisk.stockexchangeterminal.SingletonSession;
-import basilisk.stockexchangeterminal.entity.order.OrderList;
-import basilisk.stockexchangeterminal.httpserverapi.HttpServerApi;
+import basilisk.stockexchangeterminal.Utils;
+import basilisk.stockexchangeterminal.entity.OrderList;
+import basilisk.stockexchangeterminal.api.HttpServerApi;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -112,7 +113,7 @@ public class OrderFragment extends Fragment implements AdapterView.OnItemLongCli
                 Activity activity = getActivity();
                 if (activity != null && isAdded()) {
                     swipeRefreshLayout.setRefreshing(false);
-                    if (response.isSuccessful()) {
+                    if (response.isSuccessful() && response.body() != null) {
                         OrderList ob = response.body();
                         List oList = ob.getList();
                         if (oList != null && oList.size() >= 0) {
@@ -179,18 +180,17 @@ public class OrderFragment extends Fragment implements AdapterView.OnItemLongCli
             hashMap = new HashMap<>();
             hashMap.put("id", o.getId());
             hashMap.put("type", o.getType());
-            hashMap.put("price", o.getPrice().substring(0, 10));
-            hashMap.put("volume", o.getAmnt_trade().substring(0, 10));
-            hashMap.put("amount", o.getAmnt_base().substring(0, 10));
+            hashMap.put("price", Utils.getFormattedValue(o.getPrice()));
+            hashMap.put("volume", Utils.getFormattedValue(o.getAmnt_trade()));
+            hashMap.put("amount", Utils.getFormattedValue(o.getAmnt_base()));
             arrayList.add(hashMap);
         }
 
         ListAdapter orderAdapter = new SimpleAdapter(context, arrayList, R.layout.item_order,
                 new String[]{"id", "type", "price", "volume", "amount"},
-                new int[]{R.id.ID, R.id.type, R.id.price, R.id.volume, R.id.amount})
-        {
+                new int[]{R.id.ID, R.id.type, R.id.price, R.id.volume, R.id.amount}) {
             @Override
-            public View getView (int position, View convertView, final ViewGroup parent) {
+            public View getView(int position, View convertView, final ViewGroup parent) {
                 View v = super.getView(position, convertView, parent);
 
                 TextView textType = v.findViewById(R.id.type);
@@ -307,8 +307,7 @@ public class OrderFragment extends Fragment implements AdapterView.OnItemLongCli
                 boolean status = (boolean) response.body().get("status");
                 if (status) {
                     message = getString(R.string.order_delete_success);
-                }
-                else {
+                } else {
                     message = getString(R.string.order_delete_error);
                     String description = (String) response.body().get("description");
                     if (description != null) {

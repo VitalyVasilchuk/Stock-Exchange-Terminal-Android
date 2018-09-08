@@ -1,4 +1,4 @@
-package basilisk.stockexchangeterminal.entity.ticker;
+package basilisk.stockexchangeterminal.entity;
 public class Ticker {
 
     private String currency_trade;
@@ -18,7 +18,7 @@ public class Ticker {
     private String usd_rate;
     private Integer updated;
 
-    public String getCurrency_trade() {
+    public String getCurrencyTrade() {
         return currency_trade;
     }
 

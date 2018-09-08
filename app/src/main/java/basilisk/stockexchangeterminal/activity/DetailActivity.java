@@ -28,10 +28,10 @@ import java.util.Map;
 
 import basilisk.stockexchangeterminal.R;
 import basilisk.stockexchangeterminal.SingletonSession;
-import basilisk.stockexchangeterminal.entity.account.AccountList;
-import basilisk.stockexchangeterminal.entity.ticker.Ticker;
+import basilisk.stockexchangeterminal.entity.AccountList;
+import basilisk.stockexchangeterminal.entity.Ticker;
 import basilisk.stockexchangeterminal.fragment.ViewPagerAdapter;
-import basilisk.stockexchangeterminal.httpserverapi.HttpServerApi;
+import basilisk.stockexchangeterminal.api.HttpServerApi;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

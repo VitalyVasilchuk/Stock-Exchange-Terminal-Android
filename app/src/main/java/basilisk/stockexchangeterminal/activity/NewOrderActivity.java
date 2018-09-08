@@ -29,7 +29,7 @@ import java.util.Map;
 
 import basilisk.stockexchangeterminal.R;
 import basilisk.stockexchangeterminal.SingletonSession;
-import basilisk.stockexchangeterminal.httpserverapi.HttpServerApi;
+import basilisk.stockexchangeterminal.api.HttpServerApi;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

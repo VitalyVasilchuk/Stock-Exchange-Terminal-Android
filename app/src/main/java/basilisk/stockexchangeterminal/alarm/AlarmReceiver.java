@@ -27,9 +27,9 @@ import basilisk.stockexchangeterminal.activity.MainActivity;
 import basilisk.stockexchangeterminal.activity.SettingsActivity;
 import basilisk.stockexchangeterminal.database.AlertPrice;
 import basilisk.stockexchangeterminal.database.DatabaseAdapter;
-import basilisk.stockexchangeterminal.entity.price.PriceList;
-import basilisk.stockexchangeterminal.httpserverapi.HttpServerApi;
-import basilisk.stockexchangeterminal.httpserverapi.Interceptors;
+import basilisk.stockexchangeterminal.entity.PriceList;
+import basilisk.stockexchangeterminal.api.HttpServerApi;
+import basilisk.stockexchangeterminal.api.Interceptors;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -215,7 +215,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
             // добавил формирование стека вызова активити
             TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(context);
-            taskStackBuilder.addParentStack(DetailActivity.class);
+            taskStackBuilder.addParentStack(DetailActivity.class); // todo DetailActivity?
             taskStackBuilder.addNextIntent(resultIntent);
 
 /*

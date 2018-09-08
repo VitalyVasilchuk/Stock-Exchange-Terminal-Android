@@ -1,4 +1,4 @@
-package basilisk.stockexchangeterminal.entity.candlestick;
+package basilisk.stockexchangeterminal.entity;
 
 import java.io.Serializable;
 import java.util.List;

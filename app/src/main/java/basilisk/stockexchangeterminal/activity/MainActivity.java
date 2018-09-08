@@ -51,9 +51,9 @@ import basilisk.stockexchangeterminal.R;
 import basilisk.stockexchangeterminal.SingletonSession;
 import basilisk.stockexchangeterminal.database.AlertPrice;
 import basilisk.stockexchangeterminal.database.DatabaseAdapter;
-import basilisk.stockexchangeterminal.entity.price.PriceList;
-import basilisk.stockexchangeterminal.entity.ticker.Ticker;
-import basilisk.stockexchangeterminal.httpserverapi.HttpServerApi;
+import basilisk.stockexchangeterminal.entity.PriceList;
+import basilisk.stockexchangeterminal.entity.Ticker;
+import basilisk.stockexchangeterminal.api.HttpServerApi;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements
             loadDataFromHTTPServer();
             //loadTickerList();
         } else {
-            priceList = savedInstanceState.getParcelableArrayList("PRICE_LIST");
+            priceList = savedInstanceState.getStringArrayList("PRICE_LIST");
             prepareList();
 
 /*
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putParcelableArrayList("PRICE_LIST", priceList);
+        savedInstanceState.putSerializable("PRICE_LIST", priceList);
 
         if (alertDialog != null) {
             //savedInstanceState.putParcelable("alertDialog", alertDialog.onSaveInstanceState());

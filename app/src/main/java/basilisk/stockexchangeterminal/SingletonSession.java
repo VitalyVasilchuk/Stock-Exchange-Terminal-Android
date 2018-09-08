@@ -12,6 +12,13 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import basilisk.stockexchangeterminal.activity.SettingsActivity;
+import basilisk.stockexchangeterminal.api.NbuService;
+import basilisk.stockexchangeterminal.entity.RateNbu;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class SingletonSession {
     public static final String APP_PREF_PUBLIC_KEY = "public_key";
     public static final String APP_PREF_PRIVATE_KEY = "private_key";
@@ -66,6 +73,26 @@ public class SingletonSession {
 
         balanceBase = "";
         balanceTrade = "";
+
+        // запрос курса НБУ для рынка USD/UAH
+        Call<RateNbu[]> call = NbuService.Factory.getExchangeRate("USD");
+        call.enqueue(new Callback<RateNbu[]>() {
+            @Override
+            public void onResponse(Call<RateNbu[]> call, Response<RateNbu[]> response) {
+                if (response.isSuccessful()) {
+                    RateNbu[] rates = response.body();
+                    if (rates != null && rates.length > 0) {
+                        if (BuildConfig.DEBUG) Log.d(TAG, rates[0].toString());
+                        PreferenceManager.getDefaultSharedPreferences(App.getAppContext()).edit().putString(SettingsActivity.APP_PREF_RATE_USDUAH, String.valueOf(rates[0].getRate())).apply();
+                    }
+                } else {
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RateNbu[]> call, Throwable t) {
+            }
+        });
 
         readSharedPreferences();
     }

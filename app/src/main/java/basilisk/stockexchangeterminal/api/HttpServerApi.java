@@ -1,17 +1,17 @@
-package basilisk.stockexchangeterminal.httpserverapi;
+package basilisk.stockexchangeterminal.api;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import basilisk.stockexchangeterminal.BuildConfig;
 import basilisk.stockexchangeterminal.SingletonSession;
-import basilisk.stockexchangeterminal.entity.account.AccountList;
-import basilisk.stockexchangeterminal.entity.candlestick.CandleStick;
-import basilisk.stockexchangeterminal.entity.deal.Deal;
-import basilisk.stockexchangeterminal.entity.offerbuy.OfferBuy;
-import basilisk.stockexchangeterminal.entity.offersell.OfferSell;
-import basilisk.stockexchangeterminal.entity.order.OrderList;
-import basilisk.stockexchangeterminal.entity.price.PriceList;
+import basilisk.stockexchangeterminal.entity.AccountList;
+import basilisk.stockexchangeterminal.entity.CandleStick;
+import basilisk.stockexchangeterminal.entity.Deal;
+import basilisk.stockexchangeterminal.entity.OfferBuy;
+import basilisk.stockexchangeterminal.entity.OfferSell;
+import basilisk.stockexchangeterminal.entity.OrderList;
+import basilisk.stockexchangeterminal.entity.PriceList;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -202,7 +202,6 @@ public interface HttpServerApi {
         // получение Call-интерфейса для запроса списка котировок
         public static Call<Map<String, Object>> tickerList() {
             HttpServerApi api = HttpServerApi.Factory.create();
-            //Call<TickerList> call = api.getTickerList();
             Call<Map<String, Object>> call = api.getTickerList();
             return call;
         }

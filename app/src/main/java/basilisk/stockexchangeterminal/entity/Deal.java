@@ -1,7 +1,7 @@
 /*
 Описание атрибутов сущности Сделка (Deal)
 */
-package basilisk.stockexchangeterminal.entity.deal;
+package basilisk.stockexchangeterminal.entity;
 
 import java.io.Serializable;
 

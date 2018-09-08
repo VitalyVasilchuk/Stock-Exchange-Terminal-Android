@@ -8,6 +8,7 @@ import android.security.KeyPairGeneratorSpec;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.util.Base64;
+import android.util.Log;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -232,7 +233,7 @@ public class Enigma {
             SecretKey key = skf.generateSecret(spec);
             byte[] hash = key.getEncoded();
 
-            //Log.d(TAG, "hashPassword() time = " + Long.toString(System.currentTimeMillis() - startTime) + "ms");
+            if (BuildConfig.DEBUG) Log.d(TAG, "hashPassword() time = " + Long.toString(System.currentTimeMillis() - startTime) + "ms");
             return Base64.encodeToString(hash, Base64.NO_WRAP);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new RuntimeException(e);
